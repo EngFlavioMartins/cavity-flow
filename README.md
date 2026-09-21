@@ -1,52 +1,53 @@
-![GitHub issues](https://img.shields.io/github/issues/PRIDEmartins/lidDrivenCativyFlowSolver)
+# Cavity flow
 
-# lid-Driven Cavity flow solver
+![Computed lid-driven cavity streamlines, with a moving upper wall and interior recirculation](docs/assets/header.svg)
 
-Computationally-efficient CFD solver with user interface written in Python.
+A compact Python solver for the two-dimensional lid-driven cavity problem. The existing staggered-grid projection method combines an explicit velocity update with a discrete-cosine-transform Poisson solve.
 
-- Very efficient solver for unsteady lid-Driven cavity flow for problems with grid-sizes of up to 256x256 nodes. 
-- The pressure (Poisson) equation is efficiently solved using a 2-dimensional cosine transform based on the solver written by [Michio Inoue](https://github.com/mathworks/2D-Lid-Driven-Cavity-Flow-Incompressible-Navier-Stokes-Solver.git)
+## Quick start
 
-- The unsteady solver automatically stores velocity and pressure fields for post-processing
+Python 3.10 or newer is recommended.
 
-- The solver can compute 100 convective times ($n_t=100$) @ $Re=10^3$, in a grid of 256x256 nodes, in less than 1 second! (if output results are not stored)
+```bash
+git clone https://github.com/EngFlavioMartins/cavity-flow.git
+cd cavity-flow
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python run_example.py --output outputs/quickstart
+```
 
-<img src="uiLibs/Results.png" width="400">
+On Windows, activate with `.venv\Scripts\activate`. The headless example writes velocity snapshots and a preview without opening a desktop window. Its short default run is a setup check, not a converged benchmark.
 
-## How to run:
+For the original interface, run `python MAIN.py` from the repository root. It needs Tkinter and a graphical desktop; some Linux installations provide Tkinter separately. If the platform does not support the legacy `.ico` window icon, use the headless example.
 
-The software contains a comprehensive UI that allows for parameters input and to pre-visualization of domain and grid sizing.
+## Examples
 
-<img src="uiLibs/UI.png" width="600">
+```bash
+python run_example.py --grid 32 --steps 501 --reynolds 100 --courant 0.02 --output outputs/re100
+```
 
-### Running a simulation:
+Snapshots are written every ten solver steps. The legacy driver pauses for one second at each write, so longer runs take correspondingly longer. This README's figure uses the same numerical kernels at Re = 100 on a 56 × 56 grid; it is a flow illustration, not an independent benchmark validation.
 
-- Firstly, the user needs to input the following flow parameters:
+## Repository guide
 
-  - nx, ny: number of grid elements in x- and y-directions
-  - lx, ly: domain sizes in x- and y-directions
-  - nt: number of time-steps
-  - Co: target simulation's Coarant number (see )
-  - Re: target flow's Reynolds number. Reynolds number is based on cavity's x-dimension.
+| Location | Purpose |
+| --- | --- |
+| `run_example.py` | Headless entry point and plotting |
+| `MAIN.py` | Original Tkinter interface |
+| `solver_lidDrivenCavityFlow.py` | Time-stepping driver |
+| `solverLibs/` | Grid, boundary conditions, projection and transforms |
+| `uiLibs/` | Original interface assets and plotting |
+| `docs/assets/header.svg` | Vector overview |
 
-- Secondly, the user has to select a directory to save the files under the Run console
+## Numerical scope
 
-- Finally, the simulation can be started by clickin on "Run".
+Use a square cavity and equal grid counts with this legacy implementation. Rectangular-grid support has not been validated. The explicit viscous update needs a sufficiently small time step as well as a suitable Courant number. Saved `t` values are step indices.
 
-### If you don't have pip or git
+The original code and historical images remain available. The DCT approach credits [Michio Inoue's cavity solver](https://github.com/mathworks/2D-Lid-Driven-Cavity-Flow-Incompressible-Navier-Stokes-Solver).
 
-For pip:
+## Contributing and attribution
 
-- Mac or Linux: install with `sudo easy_install pip` (Mac or Linux) - or (Linux) find a package called 'python-pip' in your package manager.
-- Windows: [install Distribute then Pip](http://stackoverflow.com/a/12476379/992887) using the linked .MSI installers.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Maintained by [Flavio Martins](https://engflaviomartins.github.io/).
 
-For git:
-
-- Mac: install [Homebrew](https://github.com/Homebrew) first, then `brew install git`.
-- Windows or Linux: see [Installing Git](http://git-scm.com/book/en/Getting-Started-Installing-Git) from the _Pro Git_ book.
-
-### Known issues:
-
-- [ ] Selection of time-steps to save the data at is missing (currently, the software stores data at every 10 time-steps only).
-- [ ] Real-time plotting of velocity and pressure fields (avoided at the current stage of development for improved computational performance). 
-- [ ] The provided example of plotting function does not work for grids of $n_x \neq n_y$
+No standalone software licence is included in this legacy repository; this update makes no licensing change.

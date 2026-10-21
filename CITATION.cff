@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Cavity flow"
+type: software
+license: MIT
+authors:
+  - family-names: Martins
+    given-names: Flavio A. C.
+    orcid: https://orcid.org/0000-0002-1374-5760
+repository-code: "https://github.com/EngFlavioMartins/cavity-flow"
+references:
+  - type: article
+    title: "High-Re solutions for incompressible flow using the Navier-Stokes equations and a multigrid method"
+    authors:
+      - family-names: Ghia
+        given-names: U.
+      - family-names: Ghia
+        given-names: K. N.
+      - family-names: Shin
+        given-names: C. T.
+    journal: "Journal of Computational Physics"
+    volume: 48
+    start: 387
+    end: 411
+    year: 1982
+    doi: "10.1016/0021-9991(82)90058-4"

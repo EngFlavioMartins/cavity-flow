@@ -1,6 +1,8 @@
 # Cavity flow
 
-![Computed lid-driven cavity streamlines, with a moving upper wall and interior recirculation](docs/assets/header.svg)
+**Lid-driven cavity flow in a few lines of Python.**
+
+![Steady lid-driven cavity flow at Re = 1000: flow-direction texture coloured by vorticity, with eddies in the lower corners](docs/assets/render.webp)
 
 A compact Python solver for the two-dimensional lid-driven cavity problem. The existing staggered-grid projection method combines an explicit velocity update with a discrete-cosine-transform Poisson solve.
 
@@ -46,8 +48,16 @@ Use a square cavity and equal grid counts with this legacy implementation. Recta
 
 The original code and historical images remain available. The DCT approach credits [Michio Inoue's cavity solver](https://github.com/mathworks/2D-Lid-Driven-Cavity-Flow-Incompressible-Navier-Stokes-Solver).
 
-## Contributing and attribution
+## Website image
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Maintained by [Flavio Martins](https://engflaviomartins.github.io/).
+[`scripts/render/`](scripts/render/README.md) runs the solver at Re = 1000 to steady state, checks the centreline velocities against Ghia, Ghia & Shin (1982), and makes the image above.
 
-No standalone software licence is included in this legacy repository; this update makes no licensing change.
+## Citing
+
+This is an educational solver, not tied to a paper. If you use it, cite the repository. For validation, compare with U. Ghia, K. N. Ghia and C. T. Shin (1982), *J. Comput. Phys.* 48, 387–411, [doi:10.1016/0021-9991(82)90058-4](https://doi.org/10.1016/0021-9991(82)90058-4).
+
+GitHub's *Cite this repository* button uses [CITATION.cff](CITATION.cff).
+
+## Contributing and licence
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Maintained by [Flavio Martins](https://engflaviomartins.github.io/). MIT licence; see [LICENSE](LICENSE).

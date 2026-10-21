@@ -4,60 +4,46 @@
 
 ![Steady lid-driven cavity flow at Re = 1000: flow-direction texture coloured by vorticity, with eddies in the lower corners](docs/assets/render.webp)
 
-A compact Python solver for the two-dimensional lid-driven cavity problem. The existing staggered-grid projection method combines an explicit velocity update with a discrete-cosine-transform Poisson solve.
+A compact solver for the two-dimensional lid-driven cavity: a staggered grid, an explicit velocity update and a pressure projection solved with a discrete cosine transform.
 
-## Quick start
-
-Python 3.10 or newer is recommended.
+## Get started
 
 ```bash
 git clone https://github.com/EngFlavioMartins/cavity-flow.git
 cd cavity-flow
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python run_example.py --output outputs/quickstart
+pip install -r requirements.txt
+python run_example.py
 ```
 
-On Windows, activate with `.venv\Scripts\activate`. The headless example writes velocity snapshots and a preview without opening a desktop window. Its short default run is a setup check, not a converged benchmark.
+This is a short setup check; results go to `outputs/quickstart/`. For the original window-based interface, run `python MAIN.py`.
 
-For the original interface, run `python MAIN.py` from the repository root. It needs Tkinter and a graphical desktop; some Linux installations provide Tkinter separately. If the platform does not support the legacy `.ico` window icon, use the headless example.
-
-## Examples
+## Make the figure above
 
 ```bash
-python run_example.py --grid 32 --steps 501 --reynolds 100 --courant 0.02 --output outputs/re100
+sh scripts/render/make_figure.sh
 ```
 
-Snapshots are written every ten solver steps. The legacy driver pauses for one second at each write, so longer runs take correspondingly longer. This README's figure uses the same numerical kernels at Re = 100 on a 56 × 56 grid; it is a flow illustration, not an independent benchmark validation.
+You need [ParaView](https://www.paraview.org/download/) (for `pvpython`), a LaTeX installation, and `pip install pyvista pillow`. The script runs the solver at Re = 1000 to steady state (about 4 minutes) and checks it against Ghia, Ghia & Shin (1982) before drawing.
 
-## Repository guide
+## Cite
 
-| Location | Purpose |
-| --- | --- |
-| `run_example.py` | Headless entry point and plotting |
-| `MAIN.py` | Original Tkinter interface |
-| `solver_lidDrivenCavityFlow.py` | Time-stepping driver |
-| `solverLibs/` | Grid, boundary conditions, projection and transforms |
-| `uiLibs/` | Original interface assets and plotting |
-| `docs/assets/header.svg` | Vector overview |
+This educational solver is not tied to a paper. If you use it, please cite the repository; the benchmark used to check it is:
 
-## Numerical scope
+```bibtex
+@article{ghia1982,
+  author  = {Ghia, U. and Ghia, K. N. and Shin, C. T.},
+  title   = {High-{Re} Solutions for Incompressible Flow Using the {Navier--Stokes} Equations and a Multigrid Method},
+  journal = {Journal of Computational Physics},
+  volume  = {48},
+  number  = {3},
+  pages   = {387--411},
+  year    = {1982},
+  doi     = {10.1016/0021-9991(82)90058-4}
+}
+```
 
-Use a square cavity and equal grid counts with this legacy implementation. Rectangular-grid support has not been validated. The explicit viscous update needs a sufficiently small time step as well as a suitable Courant number. Saved `t` values are step indices.
+GitHub's **Cite this repository** button (from [CITATION.cff](CITATION.cff)) gives the same reference in other formats.
 
-The original code and historical images remain available. The DCT approach credits [Michio Inoue's cavity solver](https://github.com/mathworks/2D-Lid-Driven-Cavity-Flow-Incompressible-Navier-Stokes-Solver).
+## Licence
 
-## Website image
-
-[`scripts/render/`](scripts/render/README.md) runs the solver at Re = 1000 to steady state, checks the centreline velocities against Ghia, Ghia & Shin (1982), and makes the image above.
-
-## Citing
-
-This is an educational solver, not tied to a paper. If you use it, cite the repository. For validation, compare with U. Ghia, K. N. Ghia and C. T. Shin (1982), *J. Comput. Phys.* 48, 387–411, [doi:10.1016/0021-9991(82)90058-4](https://doi.org/10.1016/0021-9991(82)90058-4).
-
-GitHub's *Cite this repository* button uses [CITATION.cff](CITATION.cff).
-
-## Contributing and licence
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Maintained by [Flavio Martins](https://engflaviomartins.github.io/). MIT licence; see [LICENSE](LICENSE).
+MIT; see [LICENSE](LICENSE). The DCT approach credits [Michio Inoue's cavity solver](https://github.com/mathworks/2D-Lid-Driven-Cavity-Flow-Incompressible-Navier-Stokes-Solver).

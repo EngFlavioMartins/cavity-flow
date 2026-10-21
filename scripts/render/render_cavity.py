@@ -1,23 +1,37 @@
-"""Line-integral-convolution render of the steady Re = 1000 cavity flow.
+"""Line-integral-convolution render of the steady Re = 1000 cavity flow, OpenONDA style.
 
 Reads the output of run_cavity_re1000.py. Texture: LIC of the unit velocity
 direction, so slow corner eddies show as clearly as the primary vortex.
-Colour: vorticity (Crameri's "vik"), compressed with tanh so the thin lid
-boundary layer does not swamp the interior. Writes a PNG master and a WebP.
+Colour: vorticity with signed_dark (teal clockwise, red anticlockwise, zero
+fading into the black), compressed with tanh so the thin lid boundary layer
+does not swamp the interior. Writes the raw image; compose_cavity.py adds
+the LaTeX colour bar.
 """
 import argparse
 from pathlib import Path
 
-import cmcrameri.cm as cmc
 import numba
 import numpy as np
 from PIL import Image, ImageDraw
 from scipy.ndimage import map_coordinates
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from onda_style import STOPS  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
-WHITE = (255, 255, 255)
-WALL = (122, 130, 140)    # neutral grey geometry, as in the OpenONDA renders
-LID = (72, 78, 86)        # darker grey for the moving lid
+BLACK = (0, 0, 0)
+WALL = (96, 104, 108)     # OpenONDA surface grey
+LID = (163, 163, 163)     # OpenONDA light grey for the moving lid
+
+
+def signed_dark(t):
+    """signed_dark from onda_style, vectorised over t in [0, 1]."""
+    stops = np.array([[int(c[i:i + 2], 16) / 255 for i in (1, 3, 5)] for c in STOPS["signed_dark"]])
+    x = np.clip(t, 0, 1) * (len(stops) - 1)
+    i = np.minimum(x.astype(int), len(stops) - 2)
+    f = (x - i)[..., None]
+    return stops[i] * (1 - f) + stops[i + 1] * f
 
 
 @numba.njit(parallel=True, cache=True)
@@ -67,7 +81,7 @@ def sample(field, n_cells, px):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=ROOT / "outputs" / "re1000" / "steady.npz")
-    parser.add_argument("--output", type=Path, default=ROOT / "outputs" / "render" / "cavity-flow")
+    parser.add_argument("--output", type=Path, default=ROOT / "outputs" / "render" / "cavity-flow-raw.png")
     parser.add_argument("--width", type=int, default=2400)
     parser.add_argument("--omega-scale", type=float, default=2.5, help="tanh compression scale for vorticity")
     parser.add_argument("--seed", type=int, default=7)
@@ -100,14 +114,13 @@ def main():
     lo, hi = np.percentile(tex, [1, 99])
     tex = np.clip((tex - lo) / (hi - lo), 0, 1)
 
-    cmap = cmc.vik
-    c = cmap(0.5 + 0.5 * np.tanh(w / args.omega_scale))[..., :3]
+    c = signed_dark(0.5 + 0.5 * np.tanh(w / args.omega_scale))
     shade = 0.45 + 0.55 * tex
     rgb = np.clip(c * shade[..., None], 0, 1)
     img = Image.fromarray((rgb * 255).astype(np.uint8)).resize((side, side), Image.LANCZOS)
 
-    canvas = Image.new("RGB", (width, height), WHITE)
-    x0, y0 = (width - side) // 2, (height - side) // 2 + int(height * 0.02)
+    canvas = Image.new("RGB", (width, height), BLACK)
+    x0, y0 = int(0.12 * width), (height - side) // 2 + int(height * 0.02)
     canvas.paste(img, (x0, y0))
     draw = ImageDraw.Draw(canvas)
     wall = max(2, side // 260)
@@ -116,10 +129,8 @@ def main():
     draw.rectangle([x0 - wall, y0 - lid, x0 + side + wall - 1, y0 - 1], fill=LID)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    canvas.save(args.output.with_suffix(".png"), optimize=True)
-    canvas.save(args.output.with_suffix(".webp"), quality=85, method=6)
-    for ext in (".png", ".webp"):
-        print(args.output.with_suffix(ext), f"{args.output.with_suffix(ext).stat().st_size / 1e3:.0f} kB")
+    canvas.save(args.output)
+    print(args.output)
 
 
 if __name__ == "__main__":

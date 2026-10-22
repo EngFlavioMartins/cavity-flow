@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "Cavity flow"
 type: software
-license: MIT
+license: Apache-2.0
 abstract: "Lid-driven cavity flow solver in Python: incompressible Navier-Stokes on a staggered grid with a DCT pressure projection, validated against Ghia et al. (1982)."
 keywords:
   - "computational fluid dynamics"

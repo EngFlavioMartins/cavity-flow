@@ -1,5 +1,12 @@
 # Cavity flow
 
+<p align="center">
+  <a href="https://github.com/EngFlavioMartins/cavity-flow/actions/workflows/example.yml"><img src="https://github.com/EngFlavioMartins/cavity-flow/actions/workflows/example.yml/badge.svg" alt="Example smoke test"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white" alt="python: 3.10+"></a>
+  <a href="https://github.com/EngFlavioMartins/cavity-flow/blob/HEAD/LICENSE"><img src="https://img.shields.io/badge/license-MIT-2E7D32" alt="license: MIT"></a>
+  <a href="https://engflaviomartins.github.io/#cavity-flow"><img src="https://img.shields.io/badge/website-research%20page-15212B" alt="website: research page"></a>
+</p>
+
 **Lid-driven cavity flow in a few lines of Python.**
 
 <p align="center"><img src="docs/assets/render.webp" width="560" alt="Steady lid-driven cavity flow at Re = 1000: flow-direction texture coloured by vorticity, with eddies in the lower corners"></p>

@@ -3,6 +3,16 @@ message: "If you use this software, please cite it as below."
 title: "Cavity flow"
 type: software
 license: MIT
+abstract: "Lid-driven cavity flow solver in Python: incompressible Navier-Stokes on a staggered grid with a DCT pressure projection, validated against Ghia et al. (1982)."
+keywords:
+  - "computational fluid dynamics"
+  - "Navier-Stokes equations"
+  - "incompressible flow"
+  - "lid-driven cavity"
+  - "projection method"
+  - "discrete cosine transform"
+  - "staggered grid"
+  - "Python"
 authors:
   - family-names: Martins
     given-names: Flavio A. C.

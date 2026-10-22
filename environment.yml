@@ -1,0 +1,10 @@
+# Create with:  conda env create -f environment.yml   then:  conda activate cavity-flow
+name: cavity-flow
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - pip
+  - "numpy>=1.24"
+  - "scipy>=1.11"
+  - "matplotlib>=3.7"

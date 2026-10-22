@@ -2,7 +2,7 @@
 
 **Lid-driven cavity flow in a few lines of Python.**
 
-![Steady lid-driven cavity flow at Re = 1000: flow-direction texture coloured by vorticity, with eddies in the lower corners](docs/assets/render.webp)
+<p align="center"><img src="docs/assets/render.webp" width="560" alt="Steady lid-driven cavity flow at Re = 1000: flow-direction texture coloured by vorticity, with eddies in the lower corners"></p>
 
 A compact solver for the two-dimensional lid-driven cavity: a staggered grid, an explicit velocity update and a pressure projection solved with a discrete cosine transform.
 

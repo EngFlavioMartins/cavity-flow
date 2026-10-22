@@ -14,5 +14,5 @@ from overlay import compose  # noqa: E402
 raw, stem = Path(sys.argv[1]), Path(sys.argv[2])
 scale = float(sys.argv[3]) if len(sys.argv) > 3 else 2.5
 frac = lambda w: 0.5 + 0.5 * math.tanh(w / scale)
-compose(raw, stem, bar=dict(name="signed_dark", vmin=-1, vmax=1, x=70, y=10, height=30, title=r"$\omega L/U$",
-                            ticks=[(frac(-5), "$-$5"), (frac(-1), "$-$1"), (frac(0), "0"), (frac(1), "1"), (frac(5), "5")]))
+compose([(raw, None)], stem, bar=dict(name="signed_dark", vmin=-1, vmax=1, title=r"$\omega L/U$",
+                                     ticks=[(frac(-5), "$-$5"), (frac(0), "0"), (frac(5), "5")]))
